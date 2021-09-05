@@ -1,4 +1,4 @@
-module com.github.miolivc/hometask-api
+module com.github.miolivc/hometask
 
 go 1.17
 
