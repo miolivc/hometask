@@ -2,14 +2,15 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 type task struct {
-	ID    int64  `json:"id"`
+	ID    int    `json:"id"`
 	Name  string `json:"name"`
-	Level int16  `json:"level"`
+	Level int    `json:"level"`
 	Daily bool   `json:"daily"`
 }
 
@@ -21,6 +22,24 @@ var tasks = []task{
 
 func getTasks(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, tasks)
+}
+
+func getTaskById(c *gin.Context) {
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "task ID must be an int value"})
+		return
+	}
+
+	for _, task := range tasks {
+		if task.ID == id {
+			c.IndentedJSON(http.StatusOK, task)
+			return
+		}
+	}
+
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "task not found"})
 }
 
 func postTasks(c *gin.Context) {
@@ -39,6 +58,7 @@ func postTasks(c *gin.Context) {
 func main() {
 	router := gin.Default()
 	router.GET("/tasks", getTasks)
+	router.GET("/tasks/:id", getTaskById)
 	router.POST("/tasks", postTasks)
 
 	router.Run("localhost:8080")
