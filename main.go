@@ -55,11 +55,31 @@ func postTasks(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, newTask)
 }
 
+func deleteTaskById(c *gin.Context) {
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "task ID must be an int value"})
+		return
+	}
+
+	for i, task := range tasks {
+		if task.ID == id {
+			tasks = append(tasks[:i], tasks[i+1:]...)
+			c.IndentedJSON(http.StatusOK, gin.H{"message": "task was deleted successfully"})
+			return
+		}
+	}
+
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "task not found"})
+}
+
 func main() {
 	router := gin.Default()
 	router.GET("/tasks", getTasks)
 	router.GET("/tasks/:id", getTaskById)
 	router.POST("/tasks", postTasks)
+	router.DELETE("/tasks/:id", deleteTaskById)
 
 	router.Run("localhost:8080")
 }
