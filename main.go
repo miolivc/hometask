@@ -8,16 +8,17 @@ import (
 )
 
 type task struct {
-	ID    int    `json:"id"`
-	Name  string `json:"name"`
-	Level int    `json:"level"`
-	Daily bool   `json:"daily"`
+	ID        int    `json:"id"`
+	Name      string `json:"name"`
+	Level     int    `json:"level"`
+	Daily     bool   `json:"daily"`
+	Completed bool   `json:"completed"`
 }
 
 var tasks = []task{
-	{ID: 1, Name: "Limpar chão da cozinha", Level: 2, Daily: false},
-	{ID: 2, Name: "Limpar chão da varanda", Level: 2, Daily: false},
-	{ID: 3, Name: "Limpar caixa de areia", Level: 1, Daily: true},
+	{ID: 1, Name: "Limpar chão da cozinha", Level: 2, Daily: false, Completed: false},
+	{ID: 2, Name: "Limpar chão da varanda", Level: 2, Daily: false, Completed: false},
+	{ID: 3, Name: "Limpar caixa de areia", Level: 1, Daily: true, Completed: false},
 }
 
 func getTasks(c *gin.Context) {
